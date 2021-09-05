@@ -5,7 +5,7 @@ if not component.isAvailable("eeprom") then
 	error("EEPROM component is required for installation")
 end
 
-local handle, data, chunk = component.internet.request("https://raw.githubusercontent.com/IgorTimofeev/MineOS/master/Installer/BIOS.lua"), ""
+local handle, data, chunk = component.internet.request("https://raw.githubusercontent.com/penggrin12/MineOSFlame/master/Installer/BIOS.lua"), ""
    
 while true do
 	chunk = handle.read(math.huge)
