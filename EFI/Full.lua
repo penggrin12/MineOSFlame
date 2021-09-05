@@ -1,5 +1,5 @@
 
-local stringsMain, stringsChangeLabel, stringKeyDown, stringsFilesystem, colorsTitle, colorsBackground, colorsText, colorsSelectionBackground, colorsSelectionText, componentProxy, componentList, pullSignal, uptime, tableInsert, mathMax, mathMin, mathHuge, mathFloor = "MineOS EFI", "Change label", "key_down", "filesystem", 0x2D2D2D, 0xE1E1E1, 0x878787, 0x878787, 0xE1E1E1, component.proxy, component.list, computer.pullSignal, computer.uptime, table.insert, math.max, math.min, math.huge, math.floor
+local stringsMain, stringsChangeLabel, stringKeyDown, stringsFilesystem, colorsTitle, colorsBackground, colorsText, colorsSelectionBackground, colorsSelectionText, componentProxy, componentList, pullSignal, uptime, tableInsert, mathMax, mathMin, mathHuge, mathFloor = "MineOS Flame EFI", "Change label", "key_down", "filesystem", 0x2D2D2D, 0xE1E1E1, 0x878787, 0x878787, 0xE1E1E1, component.proxy, component.list, computer.pullSignal, computer.uptime, table.insert, math.max, math.min, math.huge, math.floor
 
 local eeprom, gpu, internetAddress = componentProxy(componentList("eeprom")()), componentProxy(componentList("gpu")()), componentList("internet")()
 
@@ -82,7 +82,7 @@ local boot, menuBack, menu, input =
 	function(proxy)
 		for i = 1, #OSList do
 			if proxy.exists(OSList[i][1]) then
-				status(stringsMain, "Booting from " .. (proxy.getLabel() or proxy.address))
+				status(stringsMain, "MineOS Flame")
 
 				-- Updating current EEPROM boot address if it's differs from given proxy address
 				if eepromGetData() ~= proxy.address then
@@ -184,14 +184,14 @@ local boot, menuBack, menu, input =
 		end
 	end
 
-status(stringsMain, "Hold Alt to show boot options")
+status(stringsMain, "press alt to open magic menu")
 
 local deadline, eventData = uptime() + 1
 while uptime() < deadline do
 	eventData = {pullSignal(deadline - uptime())}
 	if eventData[1] == stringKeyDown and eventData[4] == 56 then
 		local utilities = {
-			menuElement("Disk management", function()
+			menuElement("gtasa disk", function()
 				local restrict, filesystems, filesystemOptions =
 					function(text, limit)
 						if #text < limit then
@@ -212,10 +212,10 @@ while uptime() < deadline do
 					for address in componentList(stringsFilesystem) do
 						local proxy = componentProxy(address)
 						local label, isReadOnly, filesystemOptions =
-							proxy.getLabel() or "Unnamed",
+							proxy.getLabel() or "wha?",
 							proxy.isReadOnly(),
 							{
-								menuElement("Set as bootable", function()
+								menuElement("Set as bigcock", function()
 									eepromSetData(address)
 									updateFilesystems()
 								end, 1)
@@ -223,7 +223,7 @@ while uptime() < deadline do
 
 						if not isReadOnly then
 							tableInsert(filesystemOptions, menuElement(stringsChangeLabel, function()
-								proxy.setLabel(input(title(2, stringsChangeLabel), "Enter new name: "))
+								proxy.setLabel(input(title(2, stringsChangeLabel), "name plsss: "))
 								updateFilesystems()
 							end, 1))
 
@@ -268,11 +268,11 @@ while uptime() < deadline do
 		}
 
 		if internetAddress then	
-			tableInsert(utilities, 2, menuElement("Internet recovery", function()
+			tableInsert(utilities, 2, menuElement("re-install system", function()
 				local handle, data, result, reason = componentProxy(internetAddress).request("https://raw.githubusercontent.com/IgorTimofeev/MineOS/master/Installer/Main.lua"), ""
 
 				if handle then
-					status(stringsMain, "Downloading recovery script")
+					status(stringsMain, "Downloading recovery thing")
 
 					while 1 do
 						result, reason = handle.read(mathHuge)	
@@ -292,7 +292,7 @@ while uptime() < deadline do
 						end
 					end
 				else
-					status(stringsMain, "invalid URL-address", 1)
+					status(stringsMain, "invalid URL", 1)
 				end
 			end))
 		end
@@ -314,7 +314,7 @@ if not (proxy and boot(proxy)) then
 	end
 
 	if not proxy then
-		status(stringsMain, "No bootable mediums found", 1)
+		status(stringsMain, "Cant find system, huh?", 1)
 	end
 end
 
